@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        " >
+    <!--扫描到注解所在的包-->
+    <context:annotation-config/>
+	<context:component-scan base-package="com.he.ceshi109"/>
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+
+	<!--数据库连接池c3p0-->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.mysql.driverClass}"/>
+		<property name="jdbcUrl" value="${jdbc.mysql.url}"/>
+		<property name="user" value="${jdbc.mysql.user}"/>
+		<property name="password" value="${jdbc.mysql.password}"/>
+	</bean>
+
+	<!-- 获取 SqlSessionFactory 工厂类-->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<!--寻找接口类-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
+		<property name="basePackage" value="com.he.ceshi109.impdao"/>
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<!--注解形式事务-->
+<!--<tx:annotation-driven transaction-manager="txManager"/>-->
+
+	<!--配置文件形式事务-->
+	<!--配置切点-->
+	<aop:config>
+		<aop:pointcut id="p1" expression="execution(* com.he.ceshi109.service.*.*(..))"/>
+	</aop:config>
+
+	<!--引入事务通知-->
+	<tx:advice id="transactionInterceptor" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="reg" propagation="REQUIRED" isolation="READ_COMMITTED" read-only="false"/>
+		</tx:attributes>
+	</tx:advice>
+	<!--在哪干，配上切点-->
+	<aop:config>
+		<aop:advisor advice-ref="transactionInterceptor" pointcut-ref="p1"/>
+	</aop:config>
+</beans>

@@ -1,0 +1,34 @@
+<!--
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="jdbc.properties"/>
+	<typeAliases>
+&lt;!&ndash;		<typeAlias type="com.he.ceshi109.entity.Person" alias="person"/>&ndash;&gt;
+		<package name="com.he.ceshi109.entity"/>
+	</typeAliases>
+	&lt;!&ndash; 配置环境信息，即数据源信息 &ndash;&gt;
+	<environments default="default">
+		<environment id="default">
+			&lt;!&ndash; 配置事务管理器 &ndash;&gt;
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.mysql.className}" />
+				<property name="url" value="${jdbc.mysql.url}" />
+				<property name="username" value="${jdbc.mysql.user}" />
+				<property name="password" value="${jdbc.mysql.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	&lt;!&ndash; 配置映射文件路径 &ndash;&gt;
+	<mappers>
+&lt;!&ndash;		<mapper resource="UserMapper.xml" />&ndash;&gt;
+		<package name="com.he.ceshi109.impdao"/>
+&lt;!&ndash;		<mapper resource="PersonMapper.xml"/>&ndash;&gt;
+	</mappers>
+</configuration>
+
+
+-->

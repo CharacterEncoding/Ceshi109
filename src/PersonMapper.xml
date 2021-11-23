@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.he.ceshi109.impdao.PersonDao">
+	<select id="selectById" resultType="com.he.ceshi109.entity.Person">
+		select * from per3 where id = #{id}
+	</select>
+
+	<select id="selectAll" resultType="person">
+		select * from per3
+	</select>
+
+	<!--<select id="selectByPage" resultType="com.he.ceshi109.entity.Person">
+		select * from per3 where state = 0 limit #{page},#{rows}
+	</select>-->
+
+	<select id="selectByPage" resultType="person">
+		select * from per3 where state = 0 limit #{offset},#{size}
+	</select>
+
+	<select id="selectCount" resultType="int">
+		select count(id) from per3
+	</select>
+
+	<insert id="insert" parameterType="person">
+		insert into per3 (name,sex,age) values (#{name},#{sex},#{age})
+	</insert>
+
+	<delete id="delete" parameterType="person">
+		update per3 set state = 1 where id = #{id}
+	</delete>
+
+	<select id="selectByName" resultType="person">
+		select * from per3 where name like "%"#{name}"%"
+	</select>
+
+	<update id="update" parameterType="person">
+		update per3 set name=#{name},sex=#{sex},age=#{age} where id = #{id}
+	</update>
+
+</mapper>
+
+
+
+
